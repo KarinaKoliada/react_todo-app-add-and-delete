@@ -21,7 +21,7 @@ const TodoList: React.FC<Props> = ({
     <section className="todoapp__main" data-cy="TodoList">
       <TransitionGroup>
         {todos.map(todo => (
-          <CSSTransition key={todo.id} timeout={300} classNames="temp-item">
+          <CSSTransition key={todo.id} timeout={300} classNames="item">
             <TodoItem
               key={todo.id}
               id={todo.id}

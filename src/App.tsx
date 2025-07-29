@@ -1,3 +1,4 @@
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useEffect, useState, useRef } from 'react';
 import { Todo } from './types/Todo';
 import * as todoService from './api/todos';
@@ -282,18 +283,26 @@ export const App = () => {
           onUpdate={handleUpdate}
         />
 
-        {tempTodo && (
-          <TodoItem
-            key={tempTodo.id}
-            completed={tempTodo.completed}
-            title={tempTodo.title}
-            id={tempTodo.id}
-            loading={true}
-            onToggle={() => {}}
-            onDelete={() => {}}
-            onUpdate={() => {}}
-          />
-        )}
+        <TransitionGroup>
+          {tempTodo && (
+            <CSSTransition
+              key={tempTodo.id}
+              timeout={300}
+              classNames="temp-item"
+            >
+              <TodoItem
+                key={tempTodo.id}
+                completed={tempTodo.completed}
+                title={tempTodo.title}
+                id={tempTodo.id}
+                loading={true}
+                onToggle={() => {}}
+                onDelete={() => {}}
+                onUpdate={() => {}}
+              />
+            </CSSTransition>
+          )}
+        </TransitionGroup>
         {todos.length > 0 && (
           <Footer
             todos={todos}
