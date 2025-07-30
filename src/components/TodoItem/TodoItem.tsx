@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import classNames from 'classnames';
 import { useState } from 'react';
 
 interface Props {
@@ -47,7 +48,10 @@ const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    <div data-cy="Todo" className={'todo' + (completed ? ' completed' : '')}>
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: completed })}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -90,7 +94,7 @@ const TodoItem: React.FC<Props> = ({
 
       <div
         data-cy="TodoLoader"
-        className={`modal overlay ${loading ? 'is-active' : ''}`}
+        className={classNames('modal', 'overlay', { 'is-active': loading })}
       >
         <div className="loader" />
       </div>

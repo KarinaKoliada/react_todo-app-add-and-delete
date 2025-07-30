@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterTypes } from '../../types/FilterTypes';
 import { Todo } from '../../types/Todo';
-import Filters from '../../constants/Filter';
+import classNames from 'classnames';
 
 interface Props {
   todos: Todo[];
@@ -19,6 +19,7 @@ const Footer: React.FC<Props> = ({
   onClearCompleted,
 }) => {
   const hasCompleted = todos.some(todo => todo.completed);
+  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -27,18 +28,20 @@ const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {Filters.map(({ label, value, cy, href }) => (
+        {Object.values(FilterTypes).map(filterType => (
           <a
-            key={value}
-            href={href}
-            className={`filter__link ${filter === value ? 'selected' : ''}`}
-            data-cy={cy}
+            key={filterType}
+            href={`#/${filterType === FilterTypes.All ? '' : filterType}`}
+            className={classNames('filter__link', {
+              selected: filter === filterType,
+            })}
+            data-cy={`FilterLink${capitalize(filterType)}`}
             onClick={e => {
               e.preventDefault();
-              setFilterBy(value);
+              setFilterBy(filterType);
             }}
           >
-            {label}
+            {capitalize(filterType)}
           </a>
         ))}
       </nav>

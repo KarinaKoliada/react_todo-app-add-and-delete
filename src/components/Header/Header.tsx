@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useState } from 'react';
 
 interface Props {
@@ -30,7 +31,7 @@ const Header: React.FC<Props> = ({
     <header className="todoapp__header">
       <button
         type="button"
-        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+        className={classNames('todoapp__toggle-all', { active: allCompleted })}
         data-cy="ToggleAllButton"
         aria-label="Toggle all todos"
         onClick={onToggleAll}

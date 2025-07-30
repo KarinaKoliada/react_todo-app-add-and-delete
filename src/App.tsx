@@ -7,16 +7,16 @@ import Header from './components/Header/Header';
 import Error from './components/Error/Error';
 import TodoList from './components/TodoList/TodoList';
 import { FilterTypes } from './types/FilterTypes';
-import Filters from './constants/Filter';
 import { ErrorMessage } from './constants/ErrorMessage';
 import TodoItem from './components/TodoItem/TodoItem';
+import classNames from 'classnames';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
   const [error, setError] = useState<ErrorMessage>(ErrorMessage.EMPTY);
-  const [filter, setFilter] = useState<FilterTypes>(Filters[0].value);
+  const [filter, setFilter] = useState<FilterTypes>(FilterTypes.All);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -209,28 +209,13 @@ export const App = () => {
     }
   };
 
-  // const filteredTodos = todos.filter(todo => {
-  //   if (filter === '') {
-  //     return true;
-  //   }
-
-  //   if (filter === 'active') {
-  //     return !todo.completed;
-  //   }
-
-  //   if (filter === 'completed') {
-  //     return todo.completed;
-  //   }
-
-  //   return true;
-  // });
-
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case 'active':
+      case FilterTypes.Active:
         return !todo.completed;
-      case 'completed':
+      case FilterTypes.Completed:
         return todo.completed;
+      case FilterTypes.All:
       default:
         return true;
     }
@@ -269,7 +254,7 @@ export const App = () => {
 
         <div
           data-cy="TodoLoader"
-          className={`modal overlay ${loading ? 'is-active' : ''}`}
+          className={classNames('modal', 'overlay', { 'is-active': loading })}
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
