@@ -196,17 +196,23 @@ export const App = () => {
 
     setLoadingTodoIds(prev => [...prev, ...completedIds]);
 
-    try {
-      await Promise.all(
-        completedTodos.map(todo => todoService.deleteTodo(todo.id)),
-      );
+    const successfulDeletes: number[] = [];
 
-      setTodos(prev => prev.filter(todo => !todo.completed));
-    } catch {
-      showError(ErrorMessage.UPDATE);
-    } finally {
-      setLoadingTodoIds(prev => prev.filter(id => !completedIds.includes(id)));
+    await Promise.allSettled(
+      completedTodos.map(todo =>
+        todoService
+          .deleteTodo(todo.id)
+          .then(() => successfulDeletes.push(todo.id)),
+      ),
+    );
+
+    setTodos(prev => prev.filter(todo => !successfulDeletes.includes(todo.id)));
+
+    if (successfulDeletes.length !== completedTodos.length) {
+      showError(ErrorMessage.DELETE);
     }
+
+    setLoadingTodoIds(prev => prev.filter(id => !completedIds.includes(id)));
   };
 
   const filteredTodos = todos.filter(todo => {
